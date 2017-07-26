@@ -1,0 +1,8 @@
+---
+applications:
+- name: try-cf-spring-boot
+  buildpack: java_buildpack
+  instances: 1
+  memory: 200M
+  host: try-cf-spring-boot
+  path: target/try-cf-spring-boot-0.0.1-SNAPSHOT.jar
