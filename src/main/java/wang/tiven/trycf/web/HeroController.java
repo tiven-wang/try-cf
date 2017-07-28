@@ -3,6 +3,8 @@ package wang.tiven.trycf.web;
 import java.math.BigInteger;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -19,8 +21,8 @@ public class HeroController {
 	@Autowired(required = false) HeroRepository heroRepository;
 
 	@RequestMapping("")
-	Iterable<Hero> getAll() {
-	    return heroRepository.findAll();
+	Page<Hero> getAll(Pageable pageable) {
+	    return heroRepository.findAll(pageable);
 	}
 
 	@RequestMapping(path="", method=RequestMethod.POST)
