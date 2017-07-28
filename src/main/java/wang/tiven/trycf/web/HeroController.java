@@ -15,26 +15,26 @@ import wang.tiven.trycf.repository.HeroRepository;
 @RestController
 @RequestMapping("/hero")
 public class HeroController {
-	
+
 	@Autowired(required = false) HeroRepository heroRepository;
 
-    @RequestMapping("")
-    Iterable<Hero> getAll() {
-        return heroRepository.findAll();
-    }
-    
-    @RequestMapping(path="", method=RequestMethod.POST)
-    Hero create(@RequestBody Hero hero) {
-        return heroRepository.save(hero);
-    }
+	@RequestMapping("")
+	Iterable<Hero> getAll() {
+	    return heroRepository.findAll();
+	}
 
-    @RequestMapping("/{id}")
-    Hero get(@PathVariable BigInteger id) {
-        return heroRepository.findOne(id);
-    }
-    
-    @RequestMapping(path="/{id}", method=RequestMethod.DELETE)
-    void delete(@PathVariable BigInteger id) {
-        heroRepository.delete(id);
-    }
+	@RequestMapping(path="", method=RequestMethod.POST)
+	Hero create(@RequestBody Hero hero) {
+	    return heroRepository.save(hero);
+	}
+
+	@RequestMapping("/{id}")
+	Hero get(@PathVariable BigInteger id) {
+	    return heroRepository.findOne(id);
+	}
+
+	@RequestMapping(path="/{id}", method=RequestMethod.DELETE)
+	void delete(@PathVariable BigInteger id) {
+	    heroRepository.delete(id);
+	}
 }
