@@ -24,5 +24,13 @@ public class Hero {
 	public void setName(String name) {
 		this.name = name;
 	}
+
+	public BigInteger getId() {
+		return id;
+	}
+
+	public void setId(BigInteger id) {
+		this.id = id;
+	}
 	
 }
