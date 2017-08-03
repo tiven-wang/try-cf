@@ -1,8 +1,10 @@
 ---
 applications:
-- name: try-cf-spring-boot
+- name: try-cf-message-broker
   buildpack: java_buildpack
   instances: 1
   memory: 200M
-  host: try-cf-spring-boot
-  path: target/try-cf-spring-boot-0.0.1-SNAPSHOT.jar
+  host: try-cf-message-broker
+  path: target/try-cf-0.0.1-SNAPSHOT.jar
+  services:
+  - try-cf-amqp
