@@ -16,6 +16,14 @@ public class Hero {
     private BigInteger id;
 
 	private String name;
+	
+	public Hero() {
+		super();
+	}
+	
+	public Hero(String name) {
+		this.name = name;
+	}
 
 	public String getName() {
 		return name;
