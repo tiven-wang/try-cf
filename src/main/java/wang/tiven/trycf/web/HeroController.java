@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import wang.tiven.trycf.model.Hero;
 import wang.tiven.trycf.repository.HeroRepository;
+import wang.tiven.trycf.service.HeroService;
 import wang.tiven.trycf.web.assembler.HeroAssembler;
 import wang.tiven.trycf.web.entity.HeroResource;
 
@@ -22,6 +23,7 @@ import wang.tiven.trycf.web.entity.HeroResource;
 public class HeroController {
 
 	@Autowired(required = false) HeroRepository heroRepository;
+	@Autowired HeroService heroService;
 
 	@RequestMapping("")
 	PagedResources<HeroResource> getAll(Pageable pageable, PagedResourcesAssembler<Hero> assembler) {
@@ -41,5 +43,10 @@ public class HeroController {
 	@RequestMapping(path="/{id}", method=RequestMethod.DELETE)
 	void delete(@PathVariable("id") Hero hero) {
 	    heroRepository.delete(hero);
+	}
+	
+	@RequestMapping(path="/{id}/catch/{villains}", method=RequestMethod.POST)
+	void catchVillains(@PathVariable("id") Hero hero, @PathVariable("villains") String villains) throws InterruptedException {
+		heroService.catchVillains(hero, villains);
 	}
 }
