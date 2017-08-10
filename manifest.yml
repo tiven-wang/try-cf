@@ -1,8 +1,14 @@
 ---
 applications:
-- name: try-cf-spring-boot
+- name: try-cf-service-registry
   buildpack: java_buildpack
   instances: 1
-  memory: 200M
-  host: try-cf-spring-boot
-  path: target/try-cf-spring-boot-0.0.1-SNAPSHOT.jar
+  memory: 300M
+  host: try-cf-service-registry
+  path: service-registry/target/service-registry-0.0.1-SNAPSHOT.jar
+# - name: try-cf-service-consumer
+#   buildpack: java_buildpack
+#   instances: 1
+#   memory: 200M
+#   host: try-cf-service-consumer
+#   path: service-consumer/target/service-consumer-0.0.1-SNAPSHOT.jar
