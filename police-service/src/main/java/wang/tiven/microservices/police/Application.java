@@ -36,7 +36,7 @@ public class Application {
         return args -> {
         	policeOfficeRepository.deleteAll();
 
-            Arrays.asList("Gotham-City", "New York").forEach(n ->
+            Arrays.asList("Gotham-City", "New-York").forEach(n ->
             	policeOfficeRepository.save(new PoliceOffice(n,
                             "http://some-other-host" + n + ".com/",
                             "A description for " + n + "'s link",
@@ -75,31 +75,16 @@ class PoliceOfficeRestController {
         return this.villainRepository.findByPoliceOfficeAndName(policeOffice, villainName);
     }
 
-    @RequestMapping(value = "/villains/{villainName}", method = RequestMethod.POST)
-    @ResponseBody Villain createVillain(@PathVariable String officeName,
-                          @PathVariable String villainName) {
+    @RequestMapping(value = "/villains", method = RequestMethod.POST)
+    @ResponseBody Villain createVillain(@PathVariable String officeName, @RequestBody Villain villain) {
     	
-    	System.out.println(officeName + ", I'm here, '" + villainName + "'");
+    	System.out.println(officeName + ", I'm here, '" + villain.getName() + "'");
     	
     	PoliceOffice policeOffice = policeOfficeRepository.findByOfficeName(officeName);
     	
-    	Villain villain = new Villain(villainName);
     	villain.setPoliceOffice(policeOffice);
     	
         return this.villainRepository.save(villain);
-    }
-
-    @RequestMapping(method = RequestMethod.POST)
-    @ResponseBody PoliceOffice createPoliceOffice(@PathVariable String officeName,
-                            @RequestBody PoliceOffice policeOffice) {
-
-    	PoliceOffice policeOfficeInstance = new PoliceOffice(
-    			officeName,
-    			policeOffice.getHref(),
-    			policeOffice.getDescription(),
-    			policeOffice.getLabel());
-
-        return this.policeOfficeRepository.save(policeOfficeInstance);
     }
 
 }

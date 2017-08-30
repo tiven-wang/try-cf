@@ -9,8 +9,6 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cloud.client.loadbalancer.LoadBalanced;
 import org.springframework.cloud.netflix.eureka.EnableEurekaClient;
-import org.springframework.cloud.netflix.feign.EnableFeignClients;
-import org.springframework.cloud.netflix.feign.FeignClient;
 import org.springframework.context.annotation.Bean;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.core.io.Resource;
@@ -33,7 +31,6 @@ import org.springframework.web.util.UriComponentsBuilder;
 
 @SpringBootApplication
 @EnableEurekaClient
-@EnableFeignClients
 public class Application {
 
     public static void main(String[] args) {
@@ -56,10 +53,7 @@ class VillainRestController {
     
     @Autowired
     private RestTemplate restTemplate;
-    
-    @Autowired
-    private PoliceOfficeClient policeOfficeClient;
-    
+        
     @RequestMapping(method = {RequestMethod.POST, RequestMethod.PUT})
     ResponseEntity<?> set(@PathVariable String villainId,
                           @RequestParam MultipartFile multipartFile,
@@ -69,16 +63,13 @@ class VillainRestController {
             this.gridFsTemplate.store(inputStream, villainId);
         }
         
-//        this.restTemplate.exchange(
-//                "http://police-service/Gotham-City/villains/{villainId}",
-//                HttpMethod.POST,
-//                new HttpEntity<Villain>(new Villain()),
-//                new ParameterizedTypeReference<Villain>() {
-//                },
-//                (Object) villainId);
-        
-        policeOfficeClient.report(villainId);
-        
+        this.restTemplate.exchange(
+                "http://police-service/Gotham-City/villains",
+                HttpMethod.POST,
+                new HttpEntity<Villain>(new Villain(villainId)),
+                new ParameterizedTypeReference<Villain>() {
+                });
+                
         URI uri = uriBuilder.path("/{villainId}").buildAndExpand(villainId).toUri();
         HttpHeaders headers = new HttpHeaders();
         headers.setLocation(uri);
@@ -92,13 +83,6 @@ class VillainRestController {
         return new ResponseEntity<>(
                 this.gridFsTemplate.getResource(villainId), httpHeaders, HttpStatus.OK);
     }
-}
-
-@FeignClient("police-service")
-interface PoliceOfficeClient {
-
-    @RequestMapping(method = RequestMethod.POST, value = "/Gotham-City/villains/{villainId}")
-    Villain report(@PathVariable("villainId") String villainId);
 }
 
 class Villain {
