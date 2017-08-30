@@ -9,11 +9,11 @@
 		<version>0.0.1-SNAPSHOT</version>
 	</parent>
 
-	<name>service-registration-and-discovery:police-service</name>
-	<artifactId>police-service</artifactId>
+	<name>service-registration-and-discovery:hero-service</name>
+	<artifactId>hero-service</artifactId>
 	<packaging>jar</packaging>
 	<properties>
-		<start-class>wang.tiven.microservices.police.Application</start-class>
+		<start-class>wang.tiven.microservices.hero.Application</start-class>
 	</properties>
 
 	<dependencies>
@@ -29,13 +29,6 @@
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-web</artifactId>
 		</dependency>
-		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-data-jpa</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>com.h2database</groupId>
-			<artifactId>h2</artifactId>
-		</dependency>
 	</dependencies>
+
 </project>

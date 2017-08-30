@@ -8,6 +8,8 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cloud.netflix.eureka.EnableEurekaClient;
+import org.springframework.cloud.netflix.feign.EnableFeignClients;
+import org.springframework.cloud.netflix.feign.FeignClient;
 import org.springframework.context.annotation.Bean;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -25,6 +27,7 @@ import wang.tiven.microservices.police.repositories.VillainRepository;
 @EnableJpaRepositories
 @SpringBootApplication
 @EnableEurekaClient
+@EnableFeignClients
 public class Application {
 
     public static void main(String[] args) {
@@ -52,8 +55,12 @@ class PoliceOfficeRestController {
 
     @Autowired
     private PoliceOfficeRepository policeOfficeRepository;
+    
     @Autowired
     private VillainRepository villainRepository;
+    
+    @Autowired
+    HeroClient heroClient;
 
     @RequestMapping(method = RequestMethod.GET)
     @ResponseBody PoliceOffice getPoliceOffice(@PathVariable String officeName) {
@@ -75,18 +82,32 @@ class PoliceOfficeRestController {
         return this.villainRepository.findByPoliceOfficeAndName(policeOffice, villainName);
     }
 
-    @RequestMapping(value = "/villains/{villainName}", method = RequestMethod.POST)
-    @ResponseBody Villain createVillain(@PathVariable String officeName,
-                          @PathVariable String villainName) {
+    @RequestMapping(value = "/villains", method = RequestMethod.POST)
+    @ResponseBody Villain createVillain(@PathVariable String officeName, @RequestBody Villain villain) {
     	
-    	System.out.println(officeName + ", I'm here, '" + villainName + "'");
+    	System.out.println("This is " + officeName + ", you " + villain.getName() + " just wait!");
     	
     	PoliceOffice policeOffice = policeOfficeRepository.findByOfficeName(officeName);
     	
-    	Villain villain = new Villain(villainName);
     	villain.setPoliceOffice(policeOffice);
     	
-        return this.villainRepository.save(villain);
+    	villain = this.villainRepository.save(villain);
+        
+        heroClient.move("Batman", villain);
+        
+        return villain;
+    }
+    
+    @RequestMapping(value = "/villains/{villainName}", method = RequestMethod.POST)
+    @ResponseBody void catchVillain(@PathVariable String officeName, @PathVariable String villainName) {
+    	
+    	System.out.println("Have catched " + villainName);
+    	
+    	PoliceOffice policeOffice = policeOfficeRepository.findByOfficeName(officeName);
+    	Villain villain = villainRepository.findByPoliceOfficeAndName(policeOffice, villainName);
+    	villain.setCatched(true);
+    	
+        this.villainRepository.save(villain);
     }
 
     @RequestMapping(method = RequestMethod.POST)
@@ -102,4 +123,12 @@ class PoliceOfficeRestController {
         return this.policeOfficeRepository.save(policeOfficeInstance);
     }
 
+}
+
+@FeignClient("hero-service")
+interface HeroClient {
+
+    @RequestMapping(method = RequestMethod.POST, value = "/{heroName}")
+    void move(@PathVariable("heroName") String heroName, @RequestBody Villain villain);
+    
 }
