@@ -1,16 +1,13 @@
-
-server:
-  port: 8060
-
-
-eureka:
-  client:
-    serviceUrl:
-      defaultZone: http://eureka-service:8761/eureka/
+spring:
+  cloud:
+    services:
+      registrationMethod: route
 
 ---
+
 spring:
-  data:
-    mongodb:
-      host: mongoserver
-      port: 27017
+  profiles: dev
+
+security:
+  basic:
+    enabled: false

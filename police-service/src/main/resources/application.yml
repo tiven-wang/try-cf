@@ -1,12 +1,18 @@
 
-server:
-  port: 9098
-
 spring:
   jpa:
     generate-ddl: true
+    
+  cloud:
+    services:
+      registrationMethod: route
 
-eureka:
-  client:
-    serviceUrl:
-      defaultZone: http://eureka-service:8761/eureka/
+
+---
+
+spring:
+  profiles: dev
+
+security:
+  basic:
+    enabled: false

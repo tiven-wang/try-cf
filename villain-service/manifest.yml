@@ -1,0 +1,11 @@
+---
+instances: 1
+memory: 1G
+applications:
+  - name: villain-service
+    random-route: true
+    services:
+      - service-registry
+      - try-cf-mongodb
+    env:
+      SPRING_PROFILES_ACTIVE: dev
