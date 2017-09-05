@@ -1,0 +1,8 @@
+---
+applications:
+- name: try-cf-tcp
+  buildpack: nodejs_buildpack
+  command: node index.js
+  memory: 128M
+  host: try-cf-tcp
+  domain: cf-tcpapps.io
