@@ -13,7 +13,7 @@ import wang.tiven.trycf.model.Hero;
 import wang.tiven.trycf.repository.HeroRepository;
 
 @RestController
-@RequestMapping("/hero")
+@RequestMapping("/heros")
 public class HeroController {
 	
 	@Autowired(required = false) HeroRepository heroRepository;

@@ -4,7 +4,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>wang.tiven</groupId>
-    <artifactId>try-cf-spring-boot</artifactId>
+    <artifactId>try-cf-multi-tenancy</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <packaging>jar</packaging>
 

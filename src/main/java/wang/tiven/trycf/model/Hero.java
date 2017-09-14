@@ -8,7 +8,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 
-@Document(collection = "hero")
+@Document(collection = "#{tenantProvider.getTenantId()}_heros")
 public class Hero {
 	
 	@Id
