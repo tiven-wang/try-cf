@@ -13,10 +13,11 @@ import wang.tiven.trycf.model.Hero;
 import wang.tiven.trycf.repository.HeroRepository;
 
 @RestController
-@RequestMapping("/hero")
+@RequestMapping("/heros")
 public class HeroController {
 	
-	@Autowired(required = false) HeroRepository heroRepository;
+	@Autowired
+	HeroRepository heroRepository;
 
     @RequestMapping("")
     Iterable<Hero> getAll() {
@@ -29,12 +30,12 @@ public class HeroController {
     }
 
     @RequestMapping("/{id}")
-    Hero get(@PathVariable BigInteger id) {
+    Hero get(@PathVariable Long id) {
         return heroRepository.findOne(id);
     }
     
     @RequestMapping(path="/{id}", method=RequestMethod.DELETE)
-    void delete(@PathVariable BigInteger id) {
+    void delete(@PathVariable Long id) {
         heroRepository.delete(id);
     }
 }

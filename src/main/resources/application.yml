@@ -3,3 +3,8 @@ logging:
   level:
     wang:
       tiven: ${APP_LOGGING_LEVEL:INFO}
+
+spring:
+  jpa:
+    hibernate:
+      ddl-auto: create-drop

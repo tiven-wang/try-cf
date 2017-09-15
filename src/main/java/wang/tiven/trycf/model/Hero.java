@@ -1,19 +1,16 @@
 package wang.tiven.trycf.model;
 
-import java.math.BigInteger;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 
-import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.mapping.Document;
-
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
-
-@Document(collection = "hero")
+@Entity(name = "heros")
 public class Hero {
 	
 	@Id
-    @JsonSerialize(using = ToStringSerializer.class)
-    private BigInteger id;
+	@GeneratedValue(strategy=GenerationType.AUTO)   
+    private Long id;
 
 	private String name;
 
