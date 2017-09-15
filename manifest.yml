@@ -3,6 +3,11 @@ applications:
 - name: try-cf-spring-boot
   buildpack: java_buildpack
   instances: 1
-  memory: 300M
+  memory: 1G
   host: try-cf-spring-boot
+  env:
+    APP_LOGGING_LEVEL: DEBUG
+    SPRING_PROFILES_ACTIVE: cloud
   path: target/try-cf-spring-boot-0.0.1-SNAPSHOT.jar
+  services:
+    - try-cf-mongodb
