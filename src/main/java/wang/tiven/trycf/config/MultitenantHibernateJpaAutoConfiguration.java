@@ -28,16 +28,16 @@ import org.springframework.transaction.jta.JtaTransactionManager;
 public class MultitenantHibernateJpaAutoConfiguration extends HibernateJpaAutoConfiguration {
 	private Log logger = LogFactory.getLog(MultitenantHibernateJpaAutoConfiguration.class);
 
-	public MultitenantHibernateJpaAutoConfiguration(DataSource[] dataSource, JpaProperties jpaProperties,
+	public MultitenantHibernateJpaAutoConfiguration(DataSource dataSource, JpaProperties jpaProperties,
 			ObjectProvider<JtaTransactionManager> jtaTransactionManager,
 			ObjectProvider<TransactionManagerCustomizers> transactionManagerCustomizers) {
-		super(dataSource[0], jpaProperties, jtaTransactionManager, transactionManagerCustomizers);
+		super(dataSource, jpaProperties, jtaTransactionManager, transactionManagerCustomizers);
 	}
 	
 	@Override
 	protected void customizeVendorProperties(Map<String, Object> vendorProperties) {
 		super.customizeVendorProperties(vendorProperties);
-		vendorProperties.put("hibernate.multiTenancy", "DATABASE");
+		vendorProperties.put("hibernate.multiTenancy", "SCHEMA");
 		vendorProperties.put("hibernate.multi_tenant_connection_provider", multitenantConnectionProvider());
 		vendorProperties.put("hibernate.tenant_identifier_resolver", multitenantIdentifierResolver());
 	}
@@ -48,7 +48,7 @@ public class MultitenantHibernateJpaAutoConfiguration extends HibernateJpaAutoCo
 
 	@Bean
 	public MultiTenantConnectionProvider multitenantConnectionProvider() {
-		return new CloudDataSourceMultiTenantConnectionProviderImpl();
+		return new MultiTenantConnectionProviderImpl();
 	}
 
 	@Primary

@@ -6,7 +6,7 @@ public class TenantIdentifierResolverImpl implements CurrentTenantIdentifierReso
 
 	@Override
 	public String resolveCurrentTenantIdentifier() {
-		return "my_elephantsql";
+		return "tenant1";
 	}
 
 	@Override
