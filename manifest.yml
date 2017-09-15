@@ -11,4 +11,3 @@ applications:
   path: target/try-cf-spring-boot-0.0.1-SNAPSHOT.jar
   services:
     - my_elephantsql
-    - my_elephantsql2

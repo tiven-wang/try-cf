@@ -5,7 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 /**
  * Tenant identifier resolver implementation
- * 
+ *
  * @author <a href="mailto:i.tiven.wang@gmail.com">Tiven Wang</a>
  *
  */
@@ -13,7 +13,7 @@ public class TenantIdentifierResolverImpl implements CurrentTenantIdentifierReso
 
 	@Autowired
 	private TenantProvider tenantProvider;
-	
+
 	@Override
 	public String resolveCurrentTenantIdentifier() {
 		return tenantProvider.getTenantId();
