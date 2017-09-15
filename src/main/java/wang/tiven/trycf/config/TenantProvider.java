@@ -6,6 +6,6 @@ import org.springframework.stereotype.Component;
 public class TenantProvider {
 
   public String getTenantId() {
-    return "test";
+    return "CloudFoundry_gm6kda63_5u8rmufu";
   }
 }

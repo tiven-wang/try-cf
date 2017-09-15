@@ -6,5 +6,9 @@ applications:
   memory: 1G
   host: try-cf-multi-tenancy
   path: target/try-cf-multi-tenancy-0.0.1-SNAPSHOT.jar
+  env:
+    SPRING_PROFILES_ACTIVE: cloud
+    APP_LOGGING_LEVEL: DEBUG
   services:
-    - try-cf-mongodb
+    - try-cf-mongodb-1
+    - try-cf-mongodb-2
