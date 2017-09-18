@@ -23,6 +23,8 @@ public class CloudConfiguration extends AbstractCloudConfig {
 	
 	@Bean
 	public MultiTenantRoutingDataSource cloudRoutingDataSource(Map<String, DataSource> dataSources) {
-		return new MultiTenantRoutingDataSource(dataSources);
+		MultiTenantRoutingDataSource dataSource = new MultiTenantRoutingDataSource();
+		dataSource.setTargetDataSources((Map)dataSources);
+		return dataSource;
 	}
 }
