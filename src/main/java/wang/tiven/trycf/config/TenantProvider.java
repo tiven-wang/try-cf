@@ -6,6 +6,7 @@ import org.springframework.stereotype.Component;
 public class TenantProvider {
 
 	public String getTenantId() {
-		return "pg-wechat-service";
+		// TODO get tenant identifier from security context
+		return "my_elephantsql";
 	}
 }
