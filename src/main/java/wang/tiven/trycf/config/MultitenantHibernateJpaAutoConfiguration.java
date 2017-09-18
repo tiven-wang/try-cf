@@ -2,7 +2,6 @@ package wang.tiven.trycf.config;
 
 import java.util.Map;
 
-import javax.persistence.EntityManagerFactory;
 import javax.sql.DataSource;
 
 import org.apache.commons.logging.Log;
@@ -16,14 +15,11 @@ import org.springframework.boot.autoconfigure.orm.jpa.JpaProperties;
 import org.springframework.boot.autoconfigure.transaction.TransactionManagerCustomizers;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Primary;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
-import org.springframework.orm.jpa.JpaTransactionManager;
-import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.jta.JtaTransactionManager;
 
 @Configuration
-@EnableJpaRepositories(basePackages = "wang.tiven.trycf.repository", transactionManagerRef = "multitenantTransactionManager")
+@EnableJpaRepositories(basePackages = "wang.tiven.trycf.repository")
 @EntityScan(basePackages = "wang.tiven.trycf.model")
 public class MultitenantHibernateJpaAutoConfiguration extends HibernateJpaAutoConfiguration {
 	private Log logger = LogFactory.getLog(MultitenantHibernateJpaAutoConfiguration.class);
@@ -42,6 +38,7 @@ public class MultitenantHibernateJpaAutoConfiguration extends HibernateJpaAutoCo
 		vendorProperties.put("hibernate.tenant_identifier_resolver", multitenantIdentifierResolver());
 	}
 
+	@Bean
 	public CurrentTenantIdentifierResolver multitenantIdentifierResolver() {
 		return new TenantIdentifierResolverImpl();
 	}
@@ -51,11 +48,4 @@ public class MultitenantHibernateJpaAutoConfiguration extends HibernateJpaAutoCo
 		return new CloudDataSourceMultiTenantConnectionProviderImpl();
 	}
 
-	@Primary
-	@Bean(name = "multitenantTransactionManager")
-	public PlatformTransactionManager transactionManager(EntityManagerFactory entityManagerFactory) {
-		JpaTransactionManager transactionManager = new JpaTransactionManager();
-		transactionManager.setEntityManagerFactory(entityManagerFactory);
-		return transactionManager;
-	}
 }
