@@ -7,15 +7,14 @@ import java.net.URI;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.cloud.client.circuitbreaker.EnableCircuitBreaker;
 import org.springframework.cloud.client.loadbalancer.LoadBalanced;
 import org.springframework.cloud.netflix.eureka.EnableEurekaClient;
+import org.springframework.cloud.netflix.hystrix.dashboard.EnableHystrixDashboard;
 import org.springframework.context.annotation.Bean;
-import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.core.io.Resource;
 import org.springframework.data.mongodb.gridfs.GridFsTemplate;
-import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -28,7 +27,8 @@ import org.springframework.web.client.RestTemplate;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.util.UriComponentsBuilder;
 
-
+@EnableHystrixDashboard
+@EnableCircuitBreaker
 @SpringBootApplication
 @EnableEurekaClient
 public class Application {
@@ -36,7 +36,7 @@ public class Application {
     public static void main(String[] args) {
         SpringApplication.run(Application.class, args);
     }
-    
+
     @LoadBalanced
     @Bean
     RestTemplate restTemplate() {
@@ -45,15 +45,15 @@ public class Application {
 }
 
 @RestController
-@RequestMapping("/{villainId}")
+@RequestMapping("/villain/{villainId}")
 class VillainRestController {
 
     @Autowired
     private GridFsTemplate gridFsTemplate;
-    
+
     @Autowired
-    private RestTemplate restTemplate;
-    
+    private PoliceService policeService;
+
     @RequestMapping(method = {RequestMethod.POST, RequestMethod.PUT})
     ResponseEntity<?> set(@PathVariable String villainId,
                           @RequestParam MultipartFile multipartFile,
@@ -62,16 +62,17 @@ class VillainRestController {
         try (InputStream inputStream = multipartFile.getInputStream()) {
             this.gridFsTemplate.store(inputStream, villainId);
         }
-        
+
         System.out.println("I " + villainId + " am here!");
-        
-        this.restTemplate.exchange(
-                "http://police-service/Gotham-City/villains",
-                HttpMethod.POST,
-                new HttpEntity<Villain>(new Villain(villainId)),
-                new ParameterizedTypeReference<Villain>() {
-                });
-        
+
+        String message = policeService.notify(villainId);
+
+        System.out.println(message);
+
+        if("Ops!".equals(message)) {
+          return new ResponseEntity<>(null, HttpStatus.CREATED);
+        }
+
         URI uri = uriBuilder.path("/{villainId}").buildAndExpand(villainId).toUri();
         HttpHeaders headers = new HttpHeaders();
         headers.setLocation(uri);
@@ -85,20 +86,20 @@ class VillainRestController {
         return new ResponseEntity<>(
                 this.gridFsTemplate.getResource(villainId), httpHeaders, HttpStatus.OK);
     }
-    
+
 }
 
 class Villain {
-	
+
 	private String name;
 
     private Long id;
 
 	private boolean catched;
-	
+
 	public Villain() {
 	}
-	
+
 	public Villain(String name) {
 		this.name = name;
 	}
